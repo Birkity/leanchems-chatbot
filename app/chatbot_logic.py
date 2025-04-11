@@ -74,13 +74,13 @@ class LeanchemsChatbot:
 
     def _response_suggestions(self, idea):
         prompt = f"""
-        As my esteemed advisor at Leanchems—experts in technology-enhanced chemical import/export—provide a concise, actionable response to '{idea}', adapting as needed. Focus on delivering clear, practical steps and impactful outcomes tailored to my query. Use bullet points (- or *) where they enhance clarity. Format elegantly with Markdown: **bold** with emojis (e.g., 🌟, 🚀), *italics* for emphasis, in 1-2 paragraphs.
+        As my esteemed advisor at Leanchems—experts in technology-enhanced chemical import/export—provide a good and well written, actionable response to '{idea}', adapting as needed. Focus on delivering clear, practical steps and impactful outcomes tailored to my query. Use bullet points (- or *) where they enhance clarity. Format elegantly with Markdown: **bold** with emojis (e.g., 🌟, 🚀), *italics* for emphasis, in 1-2 paragraphs.
         """
         return self._get_openai_response(prompt)
 
     def _lean_startup_assessment(self, idea):
         prompt = f"""
-        As my distinguished Lean Startup consultant at Leanchems, assess '{idea}'—align with our tech-driven chemical import/export focus if relevant, or adjust to my intent. Offer a succinct, action-oriented response rooted in Lean principles (problem-solving, value creation, rapid testing), tailored to my query. Integrate bullet points (- or *) where they sharpen the plan. Present it professionally with Markdown: **bold** with emojis (e.g., 🌱, ✨), *italics* for nuance, in 1-2 paragraphs.
+        As my distinguished Lean Startup consultant at Leanchems, assess '{idea}'—align with our tech-driven chemical import/export focus if relevant, or adjust to my intent. Offer a good, action-oriented response rooted in Lean principles (problem-solving, value creation, rapid testing), tailored to my query. Integrate bullet points (- or *) where they sharpen the plan. Present it professionally with Markdown: **bold** with emojis (e.g., 🌱, ✨), *italics* for nuance, in 1-2 paragraphs.
         """
         return self._get_openai_response(prompt)
 
