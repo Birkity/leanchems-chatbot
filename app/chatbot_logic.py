@@ -74,39 +74,19 @@ class LeanchemsChatbot:
 
     def _response_suggestions(self, idea):
         prompt = f"""
-        You are my esteemed strategic advisor at Leanchems, a company enhancing chemical import/export through technology, though you may adapt to the direction of my input '{idea}'. Provide a concise, compelling response that directly addresses my query, emphasising actionable steps and potential outcomes. Incorporate bullet points where appropriate:
-        Give me you action-oriented suggestions and give me clear and good answer and don't limit yourself to the following points:
-        
-        - **Problem Statement** 🛠️: Identify the core issue or opportunity—summarise it succinctly.
-        - **Target Audience** 🎯: Define the primary users or stakeholders—list them clearly.
-        - **Value Proposition** 💡: Articulate the unique value offered—describe it precisely.
-        - **Market Validation** 📊: Suggest methods to validate the idea—list them for clarity.
-        - **Key Metrics** 📈: Identify success indicators—enumerate them for tracking.
-        - **Innovative Concepts** 🌟: Present forward-thinking ideas to pursue—list them clearly.
-        - **Immediate Actions** 🚀: Outline precise steps to commence—enumerate them for implementation.
-        - **Anticipated Benefits** 🎉: Detail the prospective gains—list the rewards.
-
-        Format the response elegantly with Markdown: employ **bold** headings with emojis, *italics* for emphasis, and bullet points (- or *) for structure. Compose 1-3 paragraphs, integrating bullet points seamlessly, to deliver a refined, action-oriented strategy tailored to '{idea}'.
+        As my esteemed advisor at Leanchems—experts in technology-enhanced chemical import/export—provide a concise, actionable response to '{idea}', adapting as needed. Focus on delivering clear, practical steps and impactful outcomes tailored to my query. Use bullet points (- or *) where they enhance clarity. Format elegantly with Markdown: **bold** with emojis (e.g., 🌟, 🚀), *italics* for emphasis, in 1-2 paragraphs.
         """
         return self._get_openai_response(prompt)
 
     def _lean_startup_assessment(self, idea):
         prompt = f"""
-        You are my distinguished Lean Startup consultant, evaluating '{idea}'—consider its relevance to Leanchems, a technology-driven chemical import/export enterprise, or adjust according to my query’s intent. Deliver a sophisticated, action-focused response that adheres to Lean Startup principles—identifying a problem, establishing value, and enabling rapid validation—while remaining adaptable to the input. Address my question directly, integrating bullet points (- or *) where they enhance clarity, and blend actionable recommendations with strategic insight, avoiding rigid frameworks.
-
-        Present it with refined Markdown: utilise **bold** with emojis (e.g., 🌱, ✨, 🧪), *italics* for nuance, and maintain visual appeal. Structure it in 1-3 paragraphs, ensuring a professional, dynamic assessment that propels '{idea}' forward with purpose and precision.
+        As my distinguished Lean Startup consultant at Leanchems, assess '{idea}'—align with our tech-driven chemical import/export focus if relevant, or adjust to my intent. Offer a succinct, action-oriented response rooted in Lean principles (problem-solving, value creation, rapid testing), tailored to my query. Integrate bullet points (- or *) where they sharpen the plan. Present it professionally with Markdown: **bold** with emojis (e.g., 🌱, ✨), *italics* for nuance, in 1-2 paragraphs.
         """
         return self._get_openai_response(prompt)
 
     def _scrum_agile_plan(self, idea):
         prompt = f"""
-        You are my proficient Scrum advisor, developing a plan for '{idea}'—align it with Leanchems, integrating technology into chemical import/export, or adapt as my input dictates. Construct a clear, actionable strategy that responds to my query, prioritising swift execution within an Agile framework. Include bullet points where they strengthen the plan:
-
-        - **User Requirements** 📝: Specify key needs or objectives—list them succinctly.
-        - **Initial Sprint** ⏳: Identify tasks for immediate progress—enumerate priorities.
-        - **Deliverables** 🎁: Define tangible outcomes—list what will be achieved.
-
-        Format it with polished Markdown: apply **bold** headings with emojis, *italics* for detail, and bullet points (- or *) for clarity. Craft 1-3 paragraphs, weaving in actionable steps, to provide a professional, momentum-driven approach for '{idea}'.
+        As my proficient Scrum advisor at Leanchems, integrating technology into chemical import/export, devise an actionable plan for '{idea}', adapting to my input. Prioritise swift, practical steps within an Agile framework, directly addressing my query. Use bullet points (- or *) where they strengthen execution. Format with refined Markdown: **bold** with emojis (e.g., 📝, ⏳), *italics* for detail, in 1-2 paragraphs.
         """
         return self._get_openai_response(prompt)
 
@@ -115,15 +95,15 @@ class LeanchemsChatbot:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are my astute, professional assistant at Leanchems, producing Markdown responses that are precise, actionable, and elegantly formatted—rich with bullet points and tailored to my input with a formal tone."},
+                    {"role": "system", "content": "You are my astute assistant at Leanchems, delivering concise, actionable, and professionally formatted Markdown responses—tailored to my input with a formal tone, using bullet points where effective."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000,
-                temperature=0.7  # Lowered slightly for formality
+                temperature=0.7
             )
             content = response.choices[0].message.content
             logger.debug(f"OpenAI response: {content}")
             return content
         except Exception as e:
             logger.error(f"OpenAI failed: {str(e)}")
-            return "Apologies, an error occurred—please allow me to address it shortly."
+            return "Apologies, an error occurred—please allow me to rectify it shortly."
