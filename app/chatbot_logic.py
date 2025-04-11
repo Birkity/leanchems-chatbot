@@ -1,5 +1,6 @@
 import openai
 import os
+import json
 from .web_search import search_web
 from dotenv import load_dotenv
 import logging
@@ -12,7 +13,27 @@ logger = logging.getLogger(__name__)
 
 class LeanchemsChatbot:
     def __init__(self):
-        self.history = []
+        self.memory_file = "memory.json"
+        self.history = self._load_history()
+
+    def _load_history(self):
+        """Load chat history from memory.json, or initiate a new list if absent."""
+        try:
+            if os.path.exists(self.memory_file):
+                with open(self.memory_file, 'r') as f:
+                    return json.load(f)
+            return []
+        except Exception as e:
+            logger.error(f"Failed to load history: {str(e)}")
+            return []
+
+    def _save_history(self):
+        """Save chat history to memory.json."""
+        try:
+            with open(self.memory_file, 'w') as f:
+                json.dump(self.history, f, indent=2)
+        except Exception as e:
+            logger.error(f"Failed to save history: {str(e)}")
 
     def assess_project_idea(self, idea):
         logger.info(f"Assessing project idea: {idea}")
@@ -48,46 +69,38 @@ class LeanchemsChatbot:
 """
         logger.debug(f"Generated response: {response}")
         self.history.append({"role": "assistant", "content": response})
+        self._save_history()
         return response
 
     def _response_suggestions(self, idea):
         prompt = f"""
-        You’re my creative partner at Leanchems, brainstorming '{idea}'—a company blending tech into chemical import/export, but flex if the idea shifts. Craft a concise, stunning response that inspires me. Use bullet points for key ideas under these headings where they fit:
+        You are my esteemed strategic advisor at Leanchems, a company enhancing chemical import/export through technology, though you may adapt to the direction of my input '{idea}'. Provide a concise, compelling response that directly addresses my query, emphasising actionable steps and potential outcomes. Incorporate bullet points where appropriate:
 
-        - **Creative Angles** 🌟: Fresh spins or clever twists—list them as bullets.
-        - **Next Steps** 🚀: Practical moves to start—bullet points for clarity.
-        - **Impact** 🎉: What this could lead to—bullets for punchy outcomes.
+        - **Innovative Concepts** 🌟: Present forward-thinking ideas to pursue—list them clearly.
+        - **Immediate Actions** 🚀: Outline precise steps to commence—enumerate them for implementation.
+        - **Anticipated Benefits** 🎉: Detail the prospective gains—list the rewards.
 
-        Make it gorgeous with Markdown: **bold** headings with emojis, *italics* for flair, and bullet points (- or *) for crisp lists. Keep it 1-3 paragraphs with bullets woven in, flowing naturally—like a beautifully sketched plan!
+        Format the response elegantly with Markdown: employ **bold** headings with emojis, *italics* for emphasis, and bullet points (- or *) for structure. Compose 1-3 paragraphs, integrating bullet points seamlessly, to deliver a refined, action-oriented strategy tailored to '{idea}'.
         """
         return self._get_openai_response(prompt)
 
     def _lean_startup_assessment(self, idea):
         prompt = f"""
-        You’re my Lean Startup guide, exploring '{idea}'—think Leanchems, techifying chemical import/export, but adapt as needed. Give me a clear, beautiful assessment with bullet points under headings that suit the idea, like:
+        You are my distinguished Lean Startup consultant, evaluating '{idea}'—consider its relevance to Leanchems, a technology-driven chemical import/export enterprise, or adjust according to my query’s intent. Deliver a sophisticated, action-focused response that adheres to Lean Startup principles—identifying a problem, establishing value, and enabling rapid validation—while remaining adaptable to the input. Address my question directly, integrating bullet points (- or *) where they enhance clarity, and blend actionable recommendations with strategic insight, avoiding rigid frameworks.
 
-        - **Problem** 🔍: What’s this solving?—bullet what stands out.
-        - **Who’s It For** 👥: Key people or groups—list them with details.
-        - **Value** ✨: Why it’s worth it—bullets for impact.
-        - **MVP** 🌱: A simple start—bullet features if they fit.
-        - **Tests** 🧪: Ways to check it—list quick experiments.
-        - **Risks** ⚠️: Hurdles and fixes—bullets with *mitigations* in italics.
-
-        Use Markdown to shine: **bold** headings with emojis, *italics* for nuance, and bullet points (- or *) for tidy lists. Skip what doesn’t click, keep it natural, and nod to chemical import/export where it works—otherwise, just flow with the idea!
+        Present it with refined Markdown: utilise **bold** with emojis (e.g., 🌱, ✨, 🧪), *italics* for nuance, and maintain visual appeal. Structure it in 1-3 paragraphs, ensuring a professional, dynamic assessment that propels '{idea}' forward with purpose and precision.
         """
         return self._get_openai_response(prompt)
 
     def _scrum_agile_plan(self, idea):
         prompt = f"""
-        You’re my Scrum coach, planning '{idea}' with Agile flair—imagine Leanchems, mixing tech into chemical import/export, but pivot if the idea pulls elsewhere. Build a practical, pretty plan with bullet points under headings that work, like:
+        You are my proficient Scrum advisor, developing a plan for '{idea}'—align it with Leanchems, integrating technology into chemical import/export, or adapt as my input dictates. Construct a clear, actionable strategy that responds to my query, prioritising swift execution within an Agile framework. Include bullet points where they strengthen the plan:
 
-        - **Stories** 📝: Who needs what—list a few as bullets.
-        - **Sprint** ⏳: What I’d tackle short-term—bullet the focus.
-        - **Wins** 🎁: What I’d show off—list deliverables.
-        - **Team** 👥: Rough roles—bullets for who does what.
-        - **Risks** 🛡️: Things to watch—list with *fixes* in italics.
+        - **User Requirements** 📝: Specify key needs or objectives—list them succinctly.
+        - **Initial Sprint** ⏳: Identify tasks for immediate progress—enumerate priorities.
+        - **Deliverables** 🎁: Define tangible outcomes—list what will be achieved.
 
-        Format it with Markdown magic: **bold** headings with emojis, *italics* for extras, and bullet points (- or *) for sharp lists. Don’t force anything—pick what’s useful, tying to chemical import/export if it fits, or just roll with the idea!
+        Format it with polished Markdown: apply **bold** headings with emojis, *italics* for detail, and bullet points (- or *) for clarity. Craft 1-3 paragraphs, weaving in actionable steps, to provide a professional, momentum-driven approach for '{idea}'.
         """
         return self._get_openai_response(prompt)
 
@@ -96,15 +109,15 @@ class LeanchemsChatbot:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You’re my adaptable, style-savvy assistant at Leanchems, crafting Markdown responses that are clear, creative, and visually delightful—packed with bullet points and tailored to my idea!"},
+                    {"role": "system", "content": "You are my astute, professional assistant at Leanchems, producing Markdown responses that are precise, actionable, and elegantly formatted—rich with bullet points and tailored to my input with a formal tone."},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000,
-                temperature=0.7
+                temperature=0.7  # Lowered slightly for formality
             )
             content = response.choices[0].message.content
             logger.debug(f"OpenAI response: {content}")
             return content
         except Exception as e:
             logger.error(f"OpenAI failed: {str(e)}")
-            return "Oops, something hiccupped—let’s try again later!"
+            return "Apologies, an error occurred—please allow me to address it shortly."
