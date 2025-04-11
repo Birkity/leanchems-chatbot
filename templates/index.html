@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leanchems Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-flask"></i>
+        <h1>Leanchems Chatbot</h1>
+      </div>
+      <button id="clearChat" class="clear-btn">
+        <i class="fas fa-trash"></i> Clear Chat
+      </button>
+    </header>
+    
+    <main>
+      <div class="chat-container">
+        <div id="chatHistory" class="chat-history">
+          <div class="welcome-message">
+            <h2>Welcome to Leanchems Chatbot</h2>
+            <p>Enter your project idea below to receive an assessment based on Lean Startup and Scrum Agile methodologies.</p>
+            <p class="example">Example: "I have a project idea to create a mobile app that helps people find nearby food trucks in real-time."</p>
+          </div>
+        </div>
+        
+        <div class="input-area">
+          <textarea id="userInput" placeholder="Describe your project idea here..."></textarea>
+          <button id="sendButton" class="send-btn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <p>Leanchems Chatbot © 2025</p>
+    </footer>
+  </div>
+  
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
