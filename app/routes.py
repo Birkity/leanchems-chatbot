@@ -11,10 +11,23 @@ def index():
 @bp.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
-    project_idea = data.get('message', '')
+    message = data.get('message', '')
+    session_id = data.get('session_id')
     
-    if not project_idea:
-        return jsonify({"error": "No project idea provided"}), 400
+    if not message:
+        return jsonify({"error": "No message provided"}), 400
     
-    response = chatbot.assess_project_idea(project_idea)
-    return jsonify({"response": response})
+    session_id, response = chatbot.chat(message, session_id)
+    return jsonify({
+        "response": response,
+        "session_id": session_id
+    })
+
+@bp.route('/cleanup', methods=['POST'])
+def cleanup():
+    """Endpoint to manually trigger session cleanup."""
+    try:
+        chatbot.cleanup_expired_sessions()
+        return jsonify({"status": "success", "message": "Expired sessions cleaned up"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500

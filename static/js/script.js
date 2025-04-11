@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const clearChatButton = document.getElementById("clearChat");
 
     const API_URL = "/chat";
+    let currentSessionId = null;
 
     sendButton.addEventListener("click", sendMessage);
     userInput.addEventListener("keydown", (e) => {
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function sendMessage() {
         const message = userInput.value.trim();
         if (!message) {
-            showError("Please enter a project idea");
+            showError("Please enter a message");
             return;
         }
 
@@ -30,7 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: message }),
+            body: JSON.stringify({ 
+                message: message,
+                session_id: currentSessionId 
+            }),
         })
             .then((response) => {
                 if (!response.ok) throw new Error(`Server error: ${response.status}`);
@@ -42,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     showError(data.error);
                 } else if (data.response) {
                     addMessageToChat("bot", data.response);
+                    currentSessionId = data.session_id;  // Update session ID
                 } else {
                     showError("No valid response from server");
                 }
@@ -111,5 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
         while (chatHistory.children.length > 1) {
             chatHistory.removeChild(chatHistory.lastChild);
         }
+        currentSessionId = null;  // Reset session ID when clearing chat
     }
 });
