@@ -18,12 +18,10 @@ class LeanchemsChatbot:
         logger.info(f"Assessing project idea: {idea}")
         self.history.append({"role": "user", "content": idea})
         
+        suggestions_response = markdown(self._response_suggestions(idea))
         lean_response = markdown(self._lean_startup_assessment(idea))
         scrum_response = markdown(self._scrum_agile_plan(idea))
         web_context = markdown(search_web(idea))
-        
-        # Add a new response suggestions section
-        suggestions_response = markdown(self._response_suggestions(idea))
         
         response = f"""
 <div class="assessment-container">
@@ -54,160 +52,42 @@ class LeanchemsChatbot:
 
     def _response_suggestions(self, idea):
         prompt = f"""
-        You are an innovative and practical assistant for Leanchems, providing actionable insights for project ideas. For the idea '{idea}', deliver a concise and engaging response that includes:
+        You’re my creative partner at Leanchems, brainstorming '{idea}'—a company blending tech into chemical import/export, but flex if the idea shifts. Craft a concise, stunning response that inspires me. Use bullet points for key ideas under these headings where they fit:
 
-        - **Creative Insights**: Offer unique perspectives or approaches related to the idea.
-        - **Practical Suggestions**: Provide actionable steps or considerations to advance the project.
-        - **Potential Outcomes**: Briefly outline the expected benefits or impact of implementing the idea.
-        Generate:
-           - Top 5 Most Practical Actions the user can take right now.
-           - Specific Tools, Platforms, or Resources to use.
-           - Smart Shortcuts or Automation Ideas.
-           - Relevant Business Models or Case Studies (if applicable).
-           - Advanced Strategies or Next-Level Tips.
+        - **Creative Angles** 🌟: Fresh spins or clever twists—list them as bullets.
+        - **Next Steps** 🚀: Practical moves to start—bullet points for clarity.
+        - **Impact** 🎉: What this could lead to—bullets for punchy outcomes.
 
-         Be creative, proactive, actionable, and detailed.
-        Format the response using Markdown for clarity and emphasis. Aim for a balance between brevity and depth to ensure the suggestions are both informative and to the point.
+        Make it gorgeous with Markdown: **bold** headings with emojis, *italics* for flair, and bullet points (- or *) for crisp lists. Keep it 1-3 paragraphs with bullets woven in, flowing naturally—like a beautifully sketched plan!
         """
         return self._get_openai_response(prompt)
 
     def _lean_startup_assessment(self, idea):
         prompt = f"""
-        Act as a world-class Lean Startup and Business Validation expert.
-        Give a structured assessment covering:
-            1. Core Problem Identification
-            2. Target Customer Segment
-            3. Unique Value Proposition
-            4. Suggested Minimum Viable Product (MVP) Features
-            5. Lean Business Hypotheses to Test
-            6. Customer Acquisition Strategy
-            7. Key Risks and How to Validate or Reduce Them
-            8. Recommendations for Fastest Path to Market
-            9. Suggested Tools, Frameworks or Resources
+        You’re my Lean Startup guide, exploring '{idea}'—think Leanchems, techifying chemical import/export, but adapt as needed. Give me a clear, beautiful assessment with bullet points under headings that suit the idea, like:
 
-        And also as a Lean Startup expert for Leanchems, a chemical import/export company revolutionizing operations with technology. For the idea '{idea}', provide a detailed, flexible, and structured assessment:
+        - **Problem** 🔍: What’s this solving?—bullet what stands out.
+        - **Who’s It For** 👥: Key people or groups—list them with details.
+        - **Value** ✨: Why it’s worth it—bullets for impact.
+        - **MVP** 🌱: A simple start—bullet features if they fit.
+        - **Tests** 🧪: Ways to check it—list quick experiments.
+        - **Risks** ⚠️: Hurdles and fixes—bullets with *mitigations* in italics.
 
-        ### 🌱 Minimum Viable Product (MVP)  
-        - Propose a detailed MVP tailored to the idea.  
-        - Include a robust set of **key features** with descriptions (e.g., *real-time tracking* - Monitor shipments live).  
-        - Use bullet points for clarity and allow for as many features as relevant.
-
-        ### 🎯 Customer Segments  
-        - Identify the primary **customer groups** (e.g., importers, suppliers, compliance teams).  
-        - For each, describe:  
-          - *Pain Points*: Their key challenges.  
-          - *Solution*: How the MVP addresses them.  
-        - Use bullet points and include as many segments as applicable.
-
-        ### 📊 Hypotheses  
-        - List **measurable hypotheses** with specific metrics (e.g., "Reduce delays by 25%").  
-        - Provide a comprehensive set, formatted as a numbered list, without limiting the number.
-
-        ### 🧪 Validation Plan  
-        - Outline **actionable steps** to test hypotheses.  
-        - Use a table for structure, including as many steps as needed:  
-          | **Step** | **Description** | **Timeline** | **Method** |  
-          |----------|-----------------|--------------|------------|  
-          | Pilot    | Test with clients | 2 weeks     | Pilot run  |
-
-        ### ⚠️ Risks  
-        - Highlight **risks** (e.g., regulatory shifts).  
-        - For each, add: *Mitigation* in italics (e.g., *Monitor updates*).  
-        - Use bullet points and include all relevant risks.
-
-        ### 🏭 Industry Fit  
-        - Explain how this aligns with chemical import/export needs in a concise paragraph.  
-        - Emphasize benefits like efficiency, safety, or scalability.
-
-        ### 💻 Technology Stack  
-        - Recommend a detailed stack, covering all necessary components:  
-          - **Frontend**: Tools + rationale (e.g., *React* - Dynamic UI).  
-          - **Backend**: Frameworks + databases (e.g., *Flask* - APIs).  
-          - **APIs**: External services (e.g., *Customs API*).  
-          - **DevOps**: Deployment tools (e.g., *Docker* - Consistency).  
-        - Use subheadings and bullet points, adding as many tools as relevant.
-
-        ### 💰 Cost Structure  
-        - Outline initial costs and lean strategies in a table:  
-        - Include a full range of cost items without restriction.
-
-        ### 📅 Project Management  
-        - Suggest a lightweight plan:  
-          - **Tool**: Recommended tool (e.g., *Trello* - Task tracking).  
-          - **Milestones**: Key milestones (e.g., "MVP prototype - Week 4").  
-          - **Cadence**: Meeting schedule (e.g., "Weekly reviews").  
-        - Use bullet points and include all relevant milestones.
-
-        Format in Markdown with:  
-        - **Subheadings** (`###`) with emojis (e.g., `### 🌱 MVP`).  
-        - **Bold** for emphasis (e.g., **MVP**).  
-        - *Italics* for secondary details (e.g., *mitigation*).  
-        - Tables and bullet points for structure.  
-        - A beautiful, organized, and flexible layout without strict limits on items.
+        Use Markdown to shine: **bold** headings with emojis, *italics* for nuance, and bullet points (- or *) for tidy lists. Skip what doesn’t click, keep it natural, and nod to chemical import/export where it works—otherwise, just flow with the idea!
         """
         return self._get_openai_response(prompt)
 
     def _scrum_agile_plan(self, idea):
         prompt = f"""
-        You are a Scrum Master for Leanchems, a chemical import/export company blending Lean Startup principles with Agile development. For the idea '{idea}', provide a comprehensive, flexible Scrum plan:
+        You’re my Scrum coach, planning '{idea}' with Agile flair—imagine Leanchems, mixing tech into chemical import/export, but pivot if the idea pulls elsewhere. Build a practical, pretty plan with bullet points under headings that work, like:
 
-        ### 📝 User Stories  
-        - Write **detailed user stories** (e.g., "As a logistics manager, I want...").  
-        - For each, include:  
-          - *Goal*: Why they need it.  
-          - *Acceptance Criteria*: "Given X, when Y, then Z".  
-        - Use bullet points and include as many stories as relevant.
+        - **Stories** 📝: Who needs what—list a few as bullets.
+        - **Sprint** ⏳: What I’d tackle short-term—bullet the focus.
+        - **Wins** 🎁: What I’d show off—list deliverables.
+        - **Team** 👥: Rough roles—bullets for who does what.
+        - **Risks** 🛡️: Things to watch—list with *fixes* in italics.
 
-        ### ⏳ Sprint Plan  
-        - Detail a **2-week sprint** with a full set of **tasks**.  
-        - Add all necessary tasks without restriction.
-
-        ### 🎁 Deliverables  
-        - List **specific deliverables** (e.g., "Shipment dashboard").  
-        - Add a *Purpose* sentence for each.  
-        - Use bullet points and include all relevant deliverables.
-
-        ### 👥 Team Roles  
-        - Define **roles** with responsibilities (e.g., "Developer: Build APIs").  
-        - Format as a numbered list, adding as many roles as needed.
-
-        ### 🔗 Dependencies  
-        - Note **dependencies** (e.g., "Customs API").  
-        - Add *Contingency* in italics (e.g., *Mock API if delayed*).  
-        - Use bullet points and include all relevant dependencies.
-
-        ### 📈 Success Metrics  
-        - Define **measurable metrics** (e.g., "95% uptime").  
-        - Include *Tracking Method* (e.g., "CloudWatch").  
-        - Use bullet points and list all applicable metrics.
-
-        ### 🛡️ Risk Mitigation  
-        - Identify **Scrum risks** (e.g., "Scope creep").  
-        - Provide *Mitigation* steps (e.g., "Daily standups").  
-        - Use bullet points and cover all key risks.
-
-        ### 🚀 Deployment and End-to-End Strategy  
-        - Outline a detailed plan:  
-          - **CI/CD**: Pipeline setup (e.g., *GitHub Actions*).  
-          - **Hosting**: Platform + scaling (e.g., *AWS EC2*).  
-          - **Testing**: Types + tools (e.g., *pytest*).  
-          - **Monitoring**: Tools + metrics (e.g., *CloudWatch*).  
-          - **Workflow**: Steps (e.g., "Code -> Test -> Deploy").  
-        - Use subheadings and bullet points, adding all relevant details.
-
-        ### 📅 Project Management  
-        - Suggest an Agile plan:  
-          - **Tool**: Recommended tool (e.g., *Jira* - Sprint tracking).  
-          - **Milestones**: Key milestones (e.g., "Sprint 1 end - Week 2").  
-          - **Cadence**: Meeting schedule (e.g., "Daily standups").  
-        - Use bullet points and include all necessary milestones.
-
-        Format in Markdown with:  
-        - **Subheadings** (`###`) with emojis (e.g., `### 📝 User Stories`).  
-        - **Bold** for emphasis (e.g., **User Stories**).  
-        - *Italics* for secondary details (e.g., *contingency*).  
-        - Tables and bullet points for structure.  
-        - A beautiful, organized, and flexible layout without strict limits on items.
+        Format it with Markdown magic: **bold** headings with emojis, *italics* for extras, and bullet points (- or *) for sharp lists. Don’t force anything—pick what’s useful, tying to chemical import/export if it fits, or just roll with the idea!
         """
         return self._get_openai_response(prompt)
 
@@ -216,15 +96,15 @@ class LeanchemsChatbot:
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {"role": "system", "content": "You are a detailed assistant for Leanchems, providing structured Markdown responses."},
+                    {"role": "system", "content": "You’re my adaptable, style-savvy assistant at Leanchems, crafting Markdown responses that are clear, creative, and visually delightful—packed with bullet points and tailored to my idea!"},
                     {"role": "user", "content": prompt}
                 ],
                 max_tokens=2000,
-                temperature=0.6
+                temperature=0.7
             )
             content = response.choices[0].message.content
             logger.debug(f"OpenAI response: {content}")
             return content
         except Exception as e:
             logger.error(f"OpenAI failed: {str(e)}")
-            return "Response generation failed due to OpenAI error."
+            return "Oops, something hiccupped—let’s try again later!"
