@@ -75,7 +75,13 @@ class LeanchemsChatbot:
     def _response_suggestions(self, idea):
         prompt = f"""
         You are my esteemed strategic advisor at Leanchems, a company enhancing chemical import/export through technology, though you may adapt to the direction of my input '{idea}'. Provide a concise, compelling response that directly addresses my query, emphasising actionable steps and potential outcomes. Incorporate bullet points where appropriate:
-
+        Give me you action-oriented suggestions and give me clear and good answer and don't limit yourself to the following points:
+        
+        - **Problem Statement** 🛠️: Identify the core issue or opportunity—summarise it succinctly.
+        - **Target Audience** 🎯: Define the primary users or stakeholders—list them clearly.
+        - **Value Proposition** 💡: Articulate the unique value offered—describe it precisely.
+        - **Market Validation** 📊: Suggest methods to validate the idea—list them for clarity.
+        - **Key Metrics** 📈: Identify success indicators—enumerate them for tracking.
         - **Innovative Concepts** 🌟: Present forward-thinking ideas to pursue—list them clearly.
         - **Immediate Actions** 🚀: Outline precise steps to commence—enumerate them for implementation.
         - **Anticipated Benefits** 🎉: Detail the prospective gains—list the rewards.
